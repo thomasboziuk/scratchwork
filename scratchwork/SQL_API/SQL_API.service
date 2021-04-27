@@ -1,0 +1,14 @@
+[Unit]
+Description=uWSGI instance to serve SQL_API, located in /etc/systemd/system/SQL_API.service
+After=network.target
+
+[Service]
+User=tomb
+Group=www-data
+WorkingDirectory=/home/tomb/SQL_API
+Environment="PATH=/home/tomb/SQL_API/SQL_APIenv/bin"
+ExecStart=/home/tomb/SQL_API/SQL_APIenv/bin/uwsgi --ini SQL_API.ini
+
+[Install]
+WantedBy=multi-user.target
+

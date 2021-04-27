@@ -1,0 +1,15 @@
+[Unit]
+Description=uWSGI instance to serve home_plotting, located in /etc/systemd/system/
+After=network.target
+
+[Service]
+User=tomb
+Group=www-data
+
+WorkingDirectory=/home/tomb/home_plotting
+Environment="PATH=/home/tomb/home_plotting/home_plottingenv/bin"
+ExecStart=/home/tomb/home_plotting/home_plottingenv/bin/uwsgi --ini myproject.ini
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,56 @@
+#this is located in /etc/nginx/sites-available/scratchwork
+
+server {
+    server_name scratchwork.xyz www.scratchwork.xyz;
+
+location /testerror {
+return 404;
+
+}
+
+
+location /SQL_API {
+	include uwsgi_params;
+	uwsgi_pass unix:home/tomb/SQL_API/SQL_API.sock;
+}
+
+
+location  / {
+        include uwsgi_params;
+        uwsgi_pass unix:/home/tomb/home_plotting/home_plotting.sock;
+    }
+
+
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/scratchwork.xyz/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/scratchwork.xyz/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+
+
+}
+
+
+server {
+    if ($host = www.scratchwork.xyz) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = scratchwork.xyz) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name scratchwork.xyz www.scratchwork.xyz;
+    return 404; # managed by Certbot
+
+
+
+
+}
+
